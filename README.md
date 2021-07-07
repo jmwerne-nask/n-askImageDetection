@@ -1,6 +1,8 @@
-# JW, 7/06/2021
-# Instructions for training the neural network to recognize objects in a dataset
+# ---------------------------- JW, 7/07/2021 ----------------------------
+# Instructions for training/fine-tuning a pre-trained neural network to recognize objects in a dataset
 
+
+---
 
 ## 1) Prepare directory structure
 
@@ -51,11 +53,11 @@ Now run
     
     $ python -c "import tensorflow as tf;print(tf.reduce_sum(tf.random.normal([1000, 1000])))"
 
-It should output something like 
+It'll output quite a few warnings, but try to look for the following output: 
 
     >> "tf.Tensor(1620.5817, shape=(), dtype=float32)"
 
-If it does, TensorFlow was installed correctly.
+If you see this text, TensorFlow was installed correctly.
 
 
 Next, navigate to the "TensorFlow" folder. Download the [TensorFlow Model Garden](https://github.com/tensorflow/models) by running the following:
@@ -98,7 +100,8 @@ It should run 24 tests and end with "OK".
 
 
 
-# ------------------------------------------------------------------------------
+---
+
 ## The following steps should be run any time you want to start with a new dataset
 
 
@@ -142,13 +145,17 @@ You'll also need to create a label map. To do this, create a new file called "la
 
 Navigate to ```.../workspace/dataset``` and run the following commands to generate the train and test records:
     
-    $ python <PATH_TO_TF>/TensorFlow/scripts/preprocessing/generate_tfrecord.py -x ./images/train -l ./annotations/label_map.pbtxt -o ./annotations/train.record  
-    $ python <PATH_TO_TF>/TensorFlow/scripts/preprocessing/generate_tfrecord.py -x ./images/test -l ./annotations/label_map.pbtxt -o ./annotations/test.record
+    $ python <PATH_TO_TF>/TensorFlow/scripts/preprocessing/generate_tfrecord.py -x ./images/train -l 
+      ./annotations/label_map.pbtxt -o ./annotations/train.record      
+    $ python <PATH_TO_TF>/TensorFlow/scripts/preprocessing/generate_tfrecord.py -x ./images/test -l 
+      ./annotations/label_map.pbtxt -o ./annotations/test.record
 
 Make sure that both train.record and test.record are nonempty, otherwise the training won't work (and there's a chance that it might not throw an error).
 
 
-# ------------------------------------------------------------------------
+---
+
+
 ## The following steps should be run any time you want to train a new model.
 
 
@@ -166,15 +173,15 @@ From here, **create a folder within "models"**. Name it something like "my_resne
 
 There are several parameters that need to be set in this file before any training can begin. Make the following necessary adjustments (note that the config files differ from model to model, so the line numbers are approximates):
 
-    > Line 3: set the number of object classes
+    > Line    3: set the number of object classes
     > Line ~130: set batch size (if low on RAM, set to 1 or 2; if >12GB of RAM, depending on the pre-trained model, can 
-                 use 8 or larger for batch size)
+                    use 8 or larger for batch size)
     > Line ~160: set fine_tune_checkpoint to the following file:
-     "pre-trained-models/<model name here>/checkpoint/ckpt-0".
+                    "pre-trained-models/<model_name_here>/checkpoint/ckpt-0".
     > Line ~160: set num_steps to the maximum number of steps you wish to use to train your model. I've been using 
-                 between 5000-to-15000 for my dataset of 20 images, but this is a parameter you'll likely want to 
-		 tweak. Note: if you want to stop training, then continue training the model later on, you can do 
-		 so by simply changing this parameter and rerunning the script in step 5).
+                    between 5000-to-15000 for my dataset of 20 images, but this is a parameter you'll likely want to 
+		        tweak. Note: if you want to stop training, then continue training the model later on, you can do 
+		        so by simply changing this parameter and rerunning the script in step 5).
     > Line ~170: set fine_tune_checkpoint_type: "detection"
     > Line ~170: set use_bfloat16: false (only set to true if using TPU)
     > Line ~170: set label_map_path: "annotations/label_map.pbtxt"
@@ -201,15 +208,16 @@ Open the file named ```.../workspace/dataset/pathDefine.py``` and edit the path 
 
 Navigate to ```.../workspace/dataset```. Run the following command:
 
-    $ python model_main_tf2.py --model_dir="models/<your_model_name>" --pipeline_config_path="models/<your_model_name>/pipeline.config"
+    $ python model_main_tf2.py --model_dir="models/<your_model_name>" 
+      --pipeline_config_path="models/<your_model_name>/pipeline.config"      
 
 Note: ```<your_model_name>``` was set in step 6.
 
 You've begun training your model! If you'd like to start/stop training at any point, keep in mind that the Object Detection API stores checkpoints, so all you have to do is update the desired number of steps in the pipeline.config file, and the script automatically detects your latest checkpoint and continues training from there.
 
 
+---
 
-# --------------------------------------------------------------------------------
 ## The following steps should be run any time you want to export and/or use a model
 
 
@@ -217,8 +225,8 @@ You've begun training your model! If you'd like to start/stop training at any po
 
  Once you're finished training the model, run the following command to export it:
  
-    $ python exporter_main_v2.py --input_type image_tensor --pipeline_config_path "models/<your_model_name>/pipeline.config" 
-    --trained_checkpoint_dir "models/<your_model_name>" --output_directory "exported-models/<your_name_for_the_model>"
+    $ python exporter_main_v2.py --input_type image_tensor --pipeline_config_path "models/<your_model_name>/pipeline.config"      
+      --trained_checkpoint_dir "models/<your_model_name>" --output_directory "exported-models/<your_name_for_the_model>"
 
 Note: feel free to set the output_directory flag to whatever folder you want. For the sake of consistency, though, I recommend the above.
 
@@ -244,7 +252,8 @@ This will run object detection on the images specified in either the "pathDefine
 
 
 
-Important links:
-[1] https://tensorflow-object-detection-api-tutorial.readthedocs.io/en/latest/_downloads/da4babe668a8afb093cc7776d7e630f3/generate_tfrecord.py
-[2] https://github.com/protocolbuffers/protobuf/releases
-[3] https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/tf2_detection_zoo.md
+**Important links:**
+
+    [1] https://tensorflow-object-detection-api-tutorial.readthedocs.io/en/latest/_downloads/da4babe668a8afb093cc7776d7e630f3/generate_tfrecord.py
+    [2] https://github.com/protocolbuffers/protobuf/releases
+    [3] https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/tf2_detection_zoo.md
