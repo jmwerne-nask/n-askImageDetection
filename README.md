@@ -3,6 +3,8 @@
 
 
 ---
+## The following should be run any time you're installing TensorFlow and/or the Object Detection API on a new machine
+
 
 ## 1) Prepare directory structure
 
@@ -14,7 +16,7 @@ Create the following folder structure within ```<PATH_TO_TF>```:
       > scripts
         > preprocessing  
       > workspace  
-        > dataset (name this whatever you want)  
+        > <dataset> (name this whatever you want)  
           > annotations  
       	  > exported-models
           > images
@@ -102,7 +104,7 @@ It should run 24 tests and end with "OK".
 
 ---
 
-## The following steps should be run any time you want to start with a new dataset
+## The following steps should be run any time you want to start with a new dataset or update an existing dataset
 
 
 ## 5) Copy Scripts
@@ -156,14 +158,14 @@ Make sure that both train.record and test.record are nonempty, otherwise the tra
 ---
 
 
-## The following steps should be run any time you want to train a new model.
+## The following steps should be run any time you want to train a new model
 
 
 ## 8) Download Pre-Trained Model
 
 Next, download a pre-trained model from the [object detection model zoo](https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/tf2_detection_zoo.md). Extract it to the ```pre-trained-models``` folder. I'd recommend using Faster RCNN Resnet, as it trains relatively quickly and has really good training accuracy.
 
-From here, **create a folder within "models"**. Name it something like "my_resnet" or "model_1". Take the pipeline.config file within your recently extracted "pre-trained-models" folder and copy it to this folder. 
+From here, **create a folder within "models"**. Name it something like "my_resnet" or "model_1" -- for the sake of this readme, I will denote this folder as ```<your_model_name>```. **Take the pipeline.config file** within your recently extracted "pre-trained-models" folder and **copy it to this folder**. 
 
 [3] https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/tf2_detection_zoo.md
 
@@ -196,7 +198,7 @@ Feel free to tweak any of the other parameters as well, but remember that most a
 
 ## 10) Set Path/Directory Variables
 
-Open the file named ```.../workspace/dataset/pathDefine.py``` and edit the path names. You'll most likely need to alter the following variables:
+Open the file named ```.../workspace/<dataset>/pathDefine.py``` and edit the path names. You'll most likely need to alter the following variables:
 
   - modelDir -- this determines where the checkpoints get saved to during training, as well as the pipeline that the training script uses.
   - exportModelDir -- this determines where the exported model gets saved to.
@@ -206,14 +208,36 @@ Open the file named ```.../workspace/dataset/pathDefine.py``` and edit the path 
 
 ## 11) Train the Model 
 
-Navigate to ```.../workspace/dataset```. Run the following command:
+**Note**: if you want to evaluate your model, read through 11 ii) before executing any commands in this section.
+
+Navigate to ```.../workspace/<dataset>```. Run the following command:
 
     $ python model_main_tf2.py --model_dir="models/<your_model_name>" 
       --pipeline_config_path="models/<your_model_name>/pipeline.config"      
 
-Note: ```<your_model_name>``` was set in step 6.
+Note: ```<your_model_name>``` was set in step 8.
 
-You've begun training your model! If you'd like to start/stop training at any point, keep in mind that the Object Detection API stores checkpoints, so all you have to do is update the desired number of steps in the pipeline.config file, and the script automatically detects your latest checkpoint and continues training from there.
+You've begun training your model! If you'd like to start/stop training at any point, keep in mind that the Object Detection API stores checkpoints, so all you have to do is update the desired number of steps in the pipeline.config file, and the script automatically detects your latest checkpoint and continues training from there. Generally, you want to train until the total loss is consistently below 0.3.
+
+
+## 11 ii) Evaluate the Model (optional)
+
+In addition to training your model, you can run evaluation on the "test" dataset you created earlier -- this gives you an idea of how well your model will perform on "new" data.
+
+To evaluate your model, open a new terminal **before/while your model is being trained**. Make sure you're in the ```.../workspace/<dataset>``` folder. Run the following:
+
+    $ python model_main_tf2.py --model_dir="models/<your_model_name>" 
+      --pipeline_config_path="models/<your_model_name>/pipeline.config"      
+      --checkpoint_dir="models/<your_model_name>"
+      
+
+## 11 iii) View Model Progress (optional)
+
+To view your model progress, open another terminal and navigate to ```models/<your_model_name>```. From here, run the following:
+
+    $ tensorboard --logdir .
+    
+Once this is done, open a web browser and type ```localhost:6006``` into the url search bar. Your plots should display.
 
 
 ---
@@ -223,7 +247,7 @@ You've begun training your model! If you'd like to start/stop training at any po
 
 ## 12) Export the Model
 
- Once you're finished training the model, run the following command to export it:
+ Once you're finished training the model, make sure you're in the ```.../workspace/<dataset>``` directory, then run the following command to export it:
  
     $ python exporter_main_v2.py --input_type image_tensor --pipeline_config_path "models/<your_model_name>/pipeline.config"      
       --trained_checkpoint_dir "models/<your_model_name>" --output_directory "exported-models/<your_name_for_the_model>"
@@ -234,7 +258,7 @@ Note: feel free to set the output_directory flag to whatever folder you want. Fo
 
 ## 13) Load Images & Run the Model
 
-If you want to test your model on some images, navigate to ```.../workspace/dataset``` and run the following script:
+If you want to test your model on some images, navigate to ```.../workspace/<dataset>``` and run the following script:
 
     $ python objectDetect.py
 
