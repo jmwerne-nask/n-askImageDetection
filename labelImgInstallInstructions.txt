@@ -1,0 +1,39 @@
+# JW, 6/22/2021
+# Installation Instructions for labelImg on CentOS 7
+
+1) Ensure Python is installed on your computer (preferrably Python 3). The remaining steps will assume that Python 3 is installed, though I will make note 
+where this distinction matters.
+
+2) We will use conda, which allows us to create a Python environment and run labelImg via command line. Install conda.
+    (Conda was preinstalled when I first started working on this, so perhaps try following this page:
+
+    linuxize.com/post/how-to-install-anaconda-on-centos-7/
+
+3) Type the following to create a Python environment:
+    "conda create -n <my_env>"
+
+4) Make sure the shell is configured for conda:
+    "conda init <shell>"
+
+5) To activate the Python environment:
+    "conda activate <my_env>"
+
+6) Install pyqt5 (this works for python 3, otherwise install pyqt4):
+    "yum install pythonxx-qt5-5.12.1-3.el7.x86_64"
+    where xx denotes the Python version number. (Alternatively, you can try "conda install pyqt=5", but I didn't have luck with this)
+
+6.5) I had to install the following to prevent errors later on:
+    "pip install lxml"
+
+7) Install labelImg. Navigate to the following link:
+    https://github.com/tzutalin/labelImg/releases
+
+    Download the latest version (tar.gz, preferrably), then untar using the following command:
+    "tar -zxvf labelme**.tar.gz"
+
+8) Navigate to the labelImg folder and type (assuming pyqt5 and python3):
+    "make qt5py3"
+    This will compile the resources.qrc file and allow you to run the program.
+
+9) Assuming all of the above steps worked successfully, run the following to open labelImg:
+    "python labelImg.py"

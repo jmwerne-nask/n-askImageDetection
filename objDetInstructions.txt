@@ -1,0 +1,111 @@
+# JW, 7/01/2021
+# Instructions for training the neural network to recognize objects in a dataset
+
+
+1) Prepare directory structure
+
+note to James: consider creating an example directory structure that can be tarballed and copied.
+
+Most of the scripts written require a particular file structure in order to operate correctly. As a result, create a folder structure as follows:
+
+> Tensorflow
+  > scripts
+    > preprocessing
+  > workspace
+    > dataset (name this whatever you want)
+      > annotations
+      > exported-models
+      > images
+        > test
+	> train
+      > models
+      > pre-trained-models
+
+Next, you'll need to download generate_tfrecords.py from [1], and you'll need to place it in the "annotations" folder. Next, you'll need to create a label map. To do this, create a new file called "label_map.pbtxt" and structure it as follows:
+
+  item {
+        id: 1
+        name: object1
+  }
+  item {
+        id: 2
+        name: object2
+  }
+
+... and so on.
+
+
+[1] 
+https://tensorflow-object-detection-api-tutorial.readthedocs.io/en/latest/_downloads/da4babe668a8afb093cc7776d7e630f3/generate_tfrecord.py
+
+
+
+2) Prepare dataset:
+
+First, determine the objects that you're interested in detecting. Gather images that contain these objects. Try to ensure that these images are indicative of the images you'll actually be collecting in practice (i.e. if you expect to use this neural network on high-resolution/quality images, you should gather high-resolution/quality images).
+
+Next, open labelimg and begin drawing bounding boxes around the objects of interest. Annotate these objects accordingly. Save them to the "workspace/images/train" directory. Set aside about 20% of your annotated images, and place these in the "workspace/images/test" directory.
+
+
+
+3) Download Pre-Trained Model
+
+Next, download a pre-trained model from the object detection model zoo (link here). Extract it to the "pre-trained-models" folder. I'd recommend using EfficientDet, as it trains relatively quickly and has reasonable accuracy.
+
+From here, create a folder within "models". Name it something like "my_efficientdet" or "model_1". Copy the pipeline.config file within your recently extracted pre-trained-models folder and copy it to this folder. 
+
+
+
+4) Edit pipeline.config
+
+There are several parameters that need to be set in this file before any training can begin. Make the following necessary adjustments (note that the config files differ from model to model, so the line numbers are approximates):
+
+> Line 3: set the number of object classes
+> Line ~130: set batch size (if low on RAM, set to 1 or 2; if >12GB of RAM, depending on the pre-trained model, can use 8 or larger for batch size)
+> Line ~160: set fine_tune_checkpoint to the following file:
+     "pre-trained-models/ (#model name here) /checkpoint/ckpt-0".
+> Line ~160: set num_steps to the maximum number of steps you wish to use to train your model. I've been using between 5000-to-15000 for my dataset of 20 images, but this is a parameter you'll likely want to tweak. Note: if you want to stop training, then continue training the model later on, you can do so by simply changing this parameter and rerunning the script in step 5).
+> Line ~170: set fine_tune_checkpoint_type: "detection"
+> Line ~170: set use_bfloat16: false (only set to true if using TPU)
+> Line ~170: set label_map_path: "annotations/label_map.pbtxt"
+> Line ~170: set input_path: "annotations/train.record"
+> Line ~180: set label_map_path: "annotations/label_map.pbtxt"
+> Line ~180: set input_path: "annotations/test.record"
+
+
+Feel free to tweak any of the other parameters as well, but remember that most are initialized to help the model perform well immediately. I find that tweaking the learning rate has the biggest impact on both convergence and performance of the model.
+
+
+
+5) Open "n-askImageDetection.ipynb" in Google Colab
+
+Navigate to the tab titled "[INSTRUCTIONS]: Edit Folder Paths". Set the variables to point to the appropriate files/directory paths in your google drive. 
+
+
+
+6) Run the following sections of the Colab Document "n-askImageDetection.ipynb":
+   > Info & Imports
+   > Mount Google Drive
+   > Edit Folder Paths
+   > Clone TF Model Garden Repo
+
+
+
+7) Copy model_main_tf2.py and exporter_main_v2.py into the ".../workspace/dataset" directory. Remember: you might've called the folder something other than "dataset", but it's the folder that contains annotations, images, models, etc.
+
+
+
+8) Run the following sections of "n-askImageDetection.ipynb":
+   > Install Packages & set environment
+   > Run setup.py program & test to ensure TF/Env are set correctly
+   > Generate TFrecords
+
+
+
+9) Run the "Train Model" section to begin training. If you want to run the model on the validation set while it's training, open "n-askImageValidation.ipynb" and run the sections up to Evaluate Model. Run Evaluate Model.
+
+
+
+10) Once it's done, run Export New Model to export it. If you want to see how well it runs, run Load New Model. Go to the "Load Images & Run New Model" section and modify the "img" variable to point to the images you want the model to run object detection on. Once these are set, run this section.
+
+
