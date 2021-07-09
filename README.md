@@ -16,12 +16,12 @@ Create the following folder structure within ```<PATH_TO_TF>```:
       > scripts
         > preprocessing  
       > workspace  
-        > <dataset> (name this whatever you want)  
-          > annotations  
-      	  > exported-models
+        > <dataset> (name this whatever you want)
+          > annotations
+          > exported-models
           > images
             > test
-	    > train
+            > train
           > models
           > pre-trained-models
 
