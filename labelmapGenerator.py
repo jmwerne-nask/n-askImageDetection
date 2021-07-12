@@ -10,7 +10,7 @@ flags.DEFINE_string('remove', None, 'Object class to be removed')
 flags.DEFINE_boolean('listall', False, 'Lists all object classes')
 FLAGS(sys.argv)
 
-labelMapPath = datasetDir + 'annotations/label_map.pbtxt'
+labelMapPath = 'annotations/label_map.pbtxt'
 
 
 # if label map doesn't exist, create it
