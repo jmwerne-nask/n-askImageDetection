@@ -10,11 +10,12 @@ flags.DEFINE_string('remove', None, 'Object class to be removed')
 flags.DEFINE_boolean('listall', False, 'Lists all object classes')
 FLAGS(sys.argv)
 
+labelMapPath = datasetDir + 'annotations/label_map.pbtxt'
 
 
 # if label map doesn't exist, create it
-if not os.path.exists('label_map.pbtxt'):
-  fileWrite = open('label_map.pbtxt', 'w')
+if not os.path.exists(labelMapPath):
+  fileWrite = open(labelMapPath, 'w')
   fileWrite.close()
 
 entries = 0
@@ -26,7 +27,7 @@ if FLAGS.add:  # from command line, type: --add "object1, object2"
   exists = []
   index = 0
   
-  fileRead = open('label_map.pbtxt', 'r')
+  fileRead = open(labelMapPath, 'r')
   for line in fileRead: # determine number of classes in label map
     if line == ("}\n"):
       entries += 1
@@ -42,7 +43,7 @@ if FLAGS.add:  # from command line, type: --add "object1, object2"
     print(results[index])
   
   for index in range(len(results)):
-    fileRead = open('label_map.pbtxt', 'r')
+    fileRead = open(labelMapPath, 'r')
     
     # iterate through lines
     for line in fileRead: 
@@ -56,7 +57,7 @@ if FLAGS.add:  # from command line, type: --add "object1, object2"
     # if this object isn't a duplicate, add it to the label map
     if exists[index] == False:
       entries += 1
-      fileWrite = open('label_map.pbtxt', 'a')
+      fileWrite = open(labelMapPath, 'a')
       fileWrite.write("item {\n      id: %d\n      object: %s\n}\n" % (entries, results[index]))
       fileWrite.close()
   
@@ -69,12 +70,12 @@ if FLAGS.remove: # from command line, type: --remove "object1, object2"
   i = 0
 
   for index in range(len(results)):
-    fileRead = open('label_map.pbtxt', 'r')
+    fileRead = open(labelMapPath, 'r')
     lines = fileRead.readlines()
     fileRead.close()
     
     entries = 1
-    fileWrite = open('label_map.pbtxt', 'w')
+    fileWrite = open(labelMapPath, 'w')
     for i in range(int(len(lines)/4)):
       # check every four lines (starting with line 3)
       #   this contains the object class name
@@ -95,7 +96,7 @@ if FLAGS.remove: # from command line, type: --remove "object1, object2"
     
 
 if FLAGS.listall: # from command line, type: --listall
-  fileRead = open('label_map.pbtxt', 'r')
+  fileRead = open(labelMapPath, 'r')
   lines = fileRead.readlines()
   
   # check every four lines (starting with line 3)
