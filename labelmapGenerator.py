@@ -48,7 +48,7 @@ if FLAGS.add:  # from command line, type: --add "object1, object2"
     # iterate through lines
     for line in fileRead: 
       # detect duplicates
-      if line == ("      object: " + results[index] + "\n"):
+      if line == ("      name: " + results[index] + "\n"):
         exists[index] = True
         print('This object is already in the label map.')
         break 
@@ -58,7 +58,7 @@ if FLAGS.add:  # from command line, type: --add "object1, object2"
     if exists[index] == False:
       entries += 1
       fileWrite = open(labelMapPath, 'a')
-      fileWrite.write("item {\n      id: %d\n      object: %s\n}\n" % (entries, results[index]))
+      fileWrite.write("item {\n      id: %d\n      name: %s\n}\n" % (entries, results[index]))
       fileWrite.close()
   
 
@@ -84,7 +84,7 @@ if FLAGS.remove: # from command line, type: --remove "object1, object2"
       #    id: 
       #    item:
       #   }
-      if lines[4*i+2] != ("      object: " + results[index] + "\n"):
+      if lines[4*i+2] != ("      name: " + results[index] + "\n"):
         fileWrite.write(lines[4*i])
         idstr = '      id: ' + str(entries) + '\n'
         fileWrite.write(idstr)
