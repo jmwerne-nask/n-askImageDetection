@@ -1,6 +1,7 @@
 
 
-
+import sys
+import os
 
 # edit these as necessary
 pathtoTF = sys.argv[1]
