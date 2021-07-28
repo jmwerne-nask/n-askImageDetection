@@ -1,5 +1,5 @@
-# ---------------------------- JW, 7/07/2021 ----------------------------
-# Instructions for installing the necessary software/packages and setting up the virtual environment for the Object Detection GUI
+# ---------------------------- JW, 7/28/2021 ----------------------------
+Instructions for installing the necessary software/packages and setting up the virtual environment for the Object Detection GUI
 
 
 ## Table of Contents
@@ -69,10 +69,12 @@ This should open the GUI.
 
 TensorFlow operates on a particular directory structure called a "workspace". The base directory sets the parent directory for this structure. Feel free to enter any directory here (if no text is entered, the directory defaults to <gui_path>). The "existing workspace" indicator will glow red if no workspace currently exists in the selected base directory, and it will glow green if a workspace does exist.
 
-Instructions:
+*Instructions:*
+```
 * [Workspace Tab]
 * enter base directory
 * press "Update Base Directory"
+```
 
 
 ## 4) Create Workspace (first time)
@@ -81,13 +83,13 @@ A workspace will likely only have to be generated once, but the option to genera
 
 To generate the workspace, press the "Create Workspace" button. This creates the following directory structure (all of the following listed are directories):
 
-    > <path_to_gui>
+    > <path_to_base_dir>
       > TensorFlow  
         > scripts
           > preprocessing  
         > workspace  
 
-Instructions:
+*Instructions:*
 * [Workspace Tab]
 * press "Create Workspace"
 
@@ -106,26 +108,27 @@ $ python labelImg.py
 From here, open an image, use the "Create\nRectBox" to draw boxes, and give the objects appropriate and consistent object class names (e.g. if you're working with images of fruits, "Orange" and "Apple" are potential object class names). Press "Change Save Dir" to store the generated .xmls in the same folder as the images. Once the boxes are all drawn, press "Save" to generate the .xml.
 
 
-## 6) Generate Datasets
+## 6) Generate Dataset
 
 Datasets simply refer to a collection of images that contain a set of objects to be detected. If you have an existing dataset with 6 object classes, and you add another image with another object class, you should create a new dataset. From a TensorFlow perspective, it's an appension to the workspace.
 
 To generate a dataset, click on the "Dataset" tab, give a name to your dataset, enter it in the "Dataset Name: " text box, and press the "Generate new Dataset" button. This creates the following directory structure:
-    > <gui_path>
-      > TensorFlow  
-        > scripts
-          > preprocessing  
-        > workspace  
-          > <your_dataset>
-            > annotations
-            > exported-models
-            > images
-              > test
-              > train
-            > models
-            > pre-trained-models
 
-Instructions:
+     > <path_to_base_dir>
+       > TensorFlow  
+         > scripts
+           > preprocessing  
+         > workspace  
+           > <your_dataset>
+             > annotations
+             > exported-models
+             > images
+               > test
+               > train
+             > models
+             > pre-trained-models
+
+*Instructions:*
 * [Dataset tab]
 * enter dataset name
 * press "Generate New Dataset"
@@ -135,16 +138,16 @@ Instructions:
 
 ## 7) Update object classes
 
-Object classes refer to the types of objects you wish to detect. These will be based on the object class names you used to annotate the images in step [5](# collect-images-&-draw-bounding-boxes). To add/remove objects, enter the names of the object classes -- separated by commas -- into either the "Add Object" or "Remove Object" text box.
+Object classes refer to the types of objects you wish to detect. These will be based on the object class names you used to annotate the images in step [5](#collect-images-&-draw-bounding-boxes). To add/remove objects, enter the names of the object classes -- *separated by commas* -- into either the "Add Object" or "Remove Object" text box.
 
 
 ## 8) Add Training/Test Images
 
 Training refers to the process of updating the model. Testing/validation refers to the process of analysis, or "validation", to ensure that the model will perform well in practice. Testing/validation is optional, but a good ratio is to use 80% of your images/xmls for training and the remaining 20% for testing.
 
-To add images, click on the "Training Images" tab, Use the tool buttons labeled "..." to add the .jpgs and the associated .xmls to the training/testing folders in the dataset. Note that the list of images only displays the image names -- it does not display the .xmls in the training/testing folders. Once these are added and consistent with the list of current objects in the "Dataset" tab, press the "Generate TF Records" button.
+To add images, click on the "Training Images" tab, Use the tool buttons labeled "..." to add the .jpgs and the associated .xmls to the training/testing folders in the dataset. Note that the list of images only displays the image names -- *it does not display the .xmls in the training/testing folders*. Once these are added and consistent with the list of current objects in the "Dataset" tab, press the "Generate TF Records" button.
 
-Instructions:
+*Instructions:*
 * add training images
 * add test images (optional)
 * press "Generate TF Records"
@@ -165,7 +168,7 @@ Next, update the pipeline config parameters. Below are descriptions of what each
 * Warmup Steps: start at the warmup learning rate, then slowly increase during the "Warmup Steps". Once the net has iterated through the warmup steps, uses the value set by "Learning Rate" and slowly decreases until "Total Steps" is reached.
 
 
-Instructions:
+*Instructions:*
 * [Model tab]
 * select a pre-trained model
 * enter a model name
@@ -177,10 +180,10 @@ Instructions:
 
 ## 10) Train Model
 
-Make sure you have the correct model selected in the "Your Models" combo box. Once ready, press the "Train" button to train, or press "Train/Evaluate" to do training and validation simultaneously. Note that these are non-blocking processes, so you must monitor the command line to see when training is complete (wait for step number to reach the specified "Total Steps" in the pipeline config). If at any point you wish to stop training, press the "Stop Training" button.
+Make sure you have the correct model selected in the "Your Models" combo box. Once ready, press the "Train" button to train, or press "Train/Evaluate" to do training and validation simultaneously. Note that these are non-blocking processes, so *you must monitor the command line to see when training is complete* (wait for step number to reach the specified "Total Steps" in the pipeline config). If at any point you wish to stop training, press the "Stop Training" button.
 
 
-Instructions:
+*Instructions:*
 * [Model tab]
 * press "Train" or "Train/Evaluate" to train the model
 
@@ -190,7 +193,7 @@ Instructions:
 This process looks at the model selected in the "Your Models" combo box, detects the most recent checkpoint, and exports those weights as a functioning model. This exported model must be given a name -- this is determined by the text in the "Name for Exported Model" text box. Once you've created a name and entered it, press the "Export*" button.
 
 
-Instructions:
+*Instructions:*
 * [Model tab]
 * enter name for exported model
 * press "Export*"
@@ -198,10 +201,10 @@ Instructions:
 
 ## 12) Add New Images
 
-Press the "Detection" tab. Now that you have an exported model, you'll likely want to see how well it performs on "new" data -- the images that you're intending to run this model on. To add images, press the "..." tool button and add the .jpgs you're interested in performing object detection on. Note that .xmls are not required for running object detection.
+Press the "Detection" tab. Now that you have an exported model, you'll likely want to see how well it performs on "new" data -- the images that you're intending to run this model on. To add images, press the "..." tool button and add the .jpgs you're interested in performing object detection on. *Note that .xmls are not required for running object detection*.
 
 
-Instructions:
+*Instructions:*
 * [Detection tab]
 * add "new" images
 
@@ -214,6 +217,6 @@ When ready, press "Run".
 Once the object detection is complete, feel free to press the left and right arrows to view the images. As it currently stands, all images will have bounding boxes drawn, and then they'll be sent to ".../TensorFlow/workspace/<dataset>/images/unidentified", so if you want to move these images/view them in a better photo viewer, they're located there.
 
 
-Instructions:
+*Instructions:*
 * [Detection tab]
 * press "Run"
