@@ -96,7 +96,7 @@ To generate the workspace, press the "Create Workspace" button. This creates the
 ```
 
 
-## 5) Collect images & draw bounding boxes
+## 5) Collect images and draw bounding boxes
 
 First, collect a set of images. .jpgs or pdfs are preferred. If images are contained in pdfs, select the "PDF Converter" tab in the GUI, select the desired pdf, select/create an output directory to store the images to, and set the output image name. Note that if you type "image" into the text box and there are two images found in the pdf, "image_1" and "image_2" will be saved to the output directory. Additionally, if you run the conversion with the same output image name again, the current images will not be overwritten -- the next image will be named "image_3", the one after that "image_4", and so on.
 
@@ -142,7 +142,7 @@ To generate a dataset, click on the "Dataset" tab, give a name to your dataset, 
 
 ## 7) Update object classes
 
-Object classes refer to the types of objects you wish to detect. These will be based on the object class names you used to annotate the images in step [5](#5)-collect-images-&-draw-bounding-boxes). To add/remove objects, enter the names of the object classes -- **separated by commas** -- into either the "Add Object" or "Remove Object" text box.
+Object classes refer to the types of objects you wish to detect. These will be based on the object class names you used to annotate the images in step [5](#collect-images-and-draw-bounding-boxes). To add/remove objects, enter the names of the object classes -- **separated by commas** -- into either the "Add Object" or "Remove Object" text box.
 
 
 ## 8) Add Training/Test Images
