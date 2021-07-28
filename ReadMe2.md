@@ -69,8 +69,9 @@ This should open the GUI.
 
 TensorFlow operates on a particular directory structure called a "workspace". The base directory sets the parent directory for this structure. Feel free to enter any directory here (if no text is entered, the directory defaults to <gui_path>). The "existing workspace" indicator will glow red if no workspace currently exists in the selected base directory, and it will glow green if a workspace does exist.
 
-```
+
 **Instructions:**
+```
 * [Workspace Tab]
 * enter base directory
 * press "Update Base Directory"
@@ -89,8 +90,9 @@ To generate the workspace, press the "Create Workspace" button. This creates the
           > preprocessing  
         > workspace  
 
-```
+
 **Instructions:**
+```
 * [Workspace Tab]
 * press "Create Workspace"
 ```
@@ -130,8 +132,8 @@ To generate a dataset, click on the "Dataset" tab, give a name to your dataset, 
              > models
              > pre-trained-models
 
-```
 **Instructions:**
+```
 * [Dataset tab]
 * enter dataset name
 * press "Generate New Dataset"
@@ -151,8 +153,9 @@ Training refers to the process of updating the model. Testing/validation refers 
 
 To add images, click on the "Training Images" tab, Use the tool buttons labeled "..." to add the .jpgs and the associated .xmls to the training/testing folders in the dataset. Note that the list of images only displays the image names -- **it does not display the .xmls in the training/testing folders**. Once these are added and consistent with the list of current objects in the "Dataset" tab, press the "Generate TF Records" button.
 
-```
+
 **Instructions:**
+```
 * add training images
 * add test images (optional)
 * press "Generate TF Records"
@@ -173,8 +176,8 @@ Next, update the pipeline config parameters. Below are descriptions of what each
 * Warmup Steps: start at the warmup learning rate, then slowly increase during the "Warmup Steps". Once the net has iterated through the warmup steps, uses the value set by "Learning Rate" and slowly decreases until "Total Steps" is reached.
 
 
-```
 **Instructions:**
+```
 * [Model tab]
 * select a pre-trained model
 * enter a model name
@@ -190,8 +193,8 @@ Next, update the pipeline config parameters. Below are descriptions of what each
 Make sure you have the correct model selected in the "Your Models" combo box. Once ready, press the "Train" button to train, or press "Train/Evaluate" to do training and validation simultaneously. Note that these are non-blocking processes, so **you must monitor the command line to see when training is complete** (wait for step number to reach the specified "Total Steps" in the pipeline config). If at any point you wish to stop training, press the "Stop Training" button.
 
 
-```
 **Instructions:**
+```
 * [Model tab]
 * press "Train" or "Train/Evaluate" to train the model
 ```
@@ -202,8 +205,8 @@ Make sure you have the correct model selected in the "Your Models" combo box. On
 This process looks at the model selected in the "Your Models" combo box, detects the most recent checkpoint, and exports those weights as a functioning model. This exported model must be given a name -- this is determined by the text in the "Name for Exported Model" text box. Once you've created a name and entered it, press the "Export*" button.
 
 
-```
 **Instructions:**
+```
 * [Model tab]
 * enter name for exported model
 * press "Export*"
@@ -215,8 +218,8 @@ This process looks at the model selected in the "Your Models" combo box, detects
 Press the "Detection" tab. Now that you have an exported model, you'll likely want to see how well it performs on "new" data -- the images that you're intending to run this model on. To add images, press the "..." tool button and add the .jpgs you're interested in performing object detection on. **Note that .xmls are not required for running object detection**.
 
 
-```
 **Instructions:**
+```
 * [Detection tab]
 * add "new" images
 ```
@@ -230,8 +233,8 @@ When ready, press "Run".
 Once the object detection is complete, feel free to press the left and right arrows to view the images. As it currently stands, all images will have bounding boxes drawn, and then they'll be sent to ".../TensorFlow/workspace/<dataset>/images/unidentified", so if you want to move these images/view them in a better photo viewer, they're located there.
 
 
-```
 **Instructions:**
+```
 * [Detection tab]
 * press "Run"
 ```
