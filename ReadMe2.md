@@ -142,7 +142,7 @@ To generate a dataset, click on the "Dataset" tab, give a name to your dataset, 
 
 ## 7) Update object classes
 
-Object classes refer to the types of objects you wish to detect. These will be based on the object class names you used to annotate the images in step [5](#collect-images-and-draw-bounding-boxes). To add/remove objects, enter the names of the object classes -- **separated by commas** -- into either the "Add Object" or "Remove Object" text box.
+Object classes refer to the types of objects you wish to detect. These will be based on the object class names you used to annotate the images in step [5](#5-collect-images-and-draw-bounding-boxes). To add/remove objects, enter the names of the object classes -- **separated by commas** -- into either the "Add Object" or "Remove Object" text box.
 
 
 ## 8) Add Training/Test Images
